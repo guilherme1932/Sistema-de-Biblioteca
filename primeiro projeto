@@ -1,0 +1,146 @@
+class Livro:
+    def __init__(self, titulo, autor, isbn, genero, disponivel=True):
+        
+        self.titulo = titulo
+        self.autor = autor
+        self.isbn = isbn
+        self.genero = genero
+        self.disponivel = disponivel
+
+class Biblioteca:
+    def __init__(self):
+       
+        self.catalogo = []
+
+    def adicionar_livro(self, livro):
+       
+        self.catalogo.append(livro)
+        print(f'O livro "{livro.titulo}" foi adicionado à biblioteca.')
+
+    def remover_livro(self, titulo):
+        
+        for livro in self.catalogo:
+            if livro.titulo == titulo:
+                self.catalogo.remove(livro)
+                print(f'O livro "{titulo}" foi removido da biblioteca.')
+                return
+        print(f'O livro "{titulo}" não foi encontrado na biblioteca.')
+
+    def editar_livro(self, titulo, novo_titulo, novo_autor, novo_isbn, novo_genero):
+        
+        for livro in self.catalogo:
+            if livro.titulo == titulo:
+                livro.titulo = novo_titulo
+                livro.autor = novo_autor
+                livro.isbn = novo_isbn
+                livro.genero = novo_genero
+                print(f'O livro "{titulo}" foi editado com sucesso.')
+                return
+        print(f'O livro "{titulo}" não foi encontrado na biblioteca.')
+
+    def pesquisar_livro(self, parametro_pesquisa):
+   
+        encontrados = []
+        for livro in self.catalogo:
+            if parametro_pesquisa.lower() in [livro.titulo.lower(), livro.autor.lower(), livro.isbn.lower(), livro.genero.lower()]:
+                encontrados.append(livro)
+        if encontrados:
+            print("Livros encontrados:")
+            for livro in encontrados:
+                print(f"- {livro.titulo} ({livro.autor})")
+        else:
+            print("Nenhum livro encontrado com esse parâmetro de pesquisa.")
+
+    def exibir_catalogo(self):
+      
+        if self.catalogo:
+            print("Catálogo da biblioteca:")
+            for livro in self.catalogo:
+                disponibilidade = "Disponível" if livro.disponivel else "Indisponível"
+                print(f"- {livro.titulo} ({livro.autor}) - {disponibilidade}")
+        else:
+            print("A biblioteca está vazia.")
+
+    def emprestar_livro(self, titulo):
+  
+        for livro in self.catalogo:
+            if livro.titulo == titulo:
+                if livro.disponivel:
+                    livro.disponivel = False
+                    print(f'O livro "{titulo}" foi emprestado com sucesso.')
+                else:
+                    print(f'O livro "{titulo}" não está disponível no momento.')
+                return
+        print(f'O livro "{titulo}" não foi encontrado na biblioteca.')
+
+    def devolver_livro(self, titulo):
+
+        for livro in self.catalogo:
+            if livro.titulo == titulo:
+                livro.disponivel = True
+                print(f'O livro "{titulo}" foi devolvido com sucesso.')
+                return
+        print(f'O livro "{titulo}" não foi encontrado na biblioteca.')
+
+def tela_inicial():
+    print("===========================")
+    print("   Bem Vindo à Biblioteca  ")
+    print("    Como posso ajudar?    ")
+    print("===========================")
+
+def menu_principal():
+    print("Digite 0 para sair")
+    print("Digite 1 para adicionar um novo livro à biblioteca")
+    print("Digite 2 para remover um livro da biblioteca")
+    print("Digite 3 para editar um livro da biblioteca")
+    print("Digite 4 para pesquisar um livro")
+    print("Digite 5 para exibir todos os livros disponíveis na biblioteca")
+    print("Digite 6 para emprestar um livro")
+    print("Digite 7 para devolver um livro")
+
+def main():
+    
+    biblioteca = Biblioteca()
+
+    while True:
+        tela_inicial()
+        menu_principal()
+        opcao = int(input("Escolha uma opção: "))
+        print("===========================")
+
+        if opcao == 0:
+            print("Saindo da biblioteca. Até mais!")
+            break
+        elif opcao == 1:
+            titulo = input("Digite o título do livro: ")
+            autor = input("Digite o nome do autor: ")
+            isbn = input("Digite o ISBN do livro: ")
+            genero = input("Digite o gênero do livro: ")
+            novo_livro = Livro(titulo, autor, isbn, genero)
+            biblioteca.adicionar_livro(novo_livro)
+        elif opcao == 2:
+            titulo = input("Digite o título do livro que deseja remover: ")
+            biblioteca.remover_livro(titulo)
+        elif opcao == 3:
+            titulo = input("Digite o título do livro que deseja editar: ")
+            novo_titulo = input("Novo título: ")
+            novo_autor = input("Novo autor: ")
+            novo_isbn = input("Novo ISBN: ")
+            novo_genero = input("Novo gênero: ")
+            biblioteca.editar_livro(titulo, novo_titulo, novo_autor, novo_isbn, novo_genero)
+        elif opcao == 4:
+            parametro_pesquisa = input("Digite o título, autor, ISBN ou gênero do livro que deseja pesquisar: ")
+            biblioteca.pesquisar_livro(parametro_pesquisa)
+        elif opcao == 5:
+            biblioteca.exibir_catalogo()
+        elif opcao == 6:
+            titulo = input("Digite o título do livro que deseja emprestar: ")
+            biblioteca.emprestar_livro(titulo)
+        elif opcao == 7:
+            titulo = input("Digite o título do livro que deseja devolver: ")
+            biblioteca.devolver_livro(titulo)
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+
+if __name__ == "__main__":
+    main()
